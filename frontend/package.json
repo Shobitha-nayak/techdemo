@@ -1,0 +1,31 @@
+{
+    "name": "stock-frontend",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start -p $PORT",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@chakra-ui/react": "^2.8.2",
+        "@emotion/react": "^11.13.0",
+        "@emotion/styled": "^11.13.0",
+        "axios": "^1.7.2",
+        "chart.js": "^4.4.3",
+        "framer-motion": "^11.3.19",
+        "jsonwebtoken": "^9.0.2",
+        "next": "14.2.4",
+        "nookies": "^2.5.2",
+        "react": "^18",
+        "react-chartjs-2": "^5.2.0",
+        "react-dom": "^18",
+        "react-hook-form": "^7.52.1",
+        "react-spring": "^9.7.4"
+    },
+    "devDependencies": {
+        "eslint": "^8",
+        "eslint-config-next": "14.2.4"
+    }
+}

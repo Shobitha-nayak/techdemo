@@ -1,0 +1,19 @@
+/* styles/Home.module.css */
+.container {
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .chartContainer {
+    margin-bottom: 40px;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  

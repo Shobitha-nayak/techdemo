@@ -1,0 +1,19 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.db
+
+# Node
+node_modules/
+.next/
+*.log
+
+# Docker
+*.dockerignore
+*.tar
+
+# Kubernetes
+*.yaml
+*.yml

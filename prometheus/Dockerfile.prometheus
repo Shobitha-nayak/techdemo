@@ -1,0 +1,8 @@
+# Use the official Prometheus image
+FROM prom/prometheus:v2.37.0
+
+# Copy the Prometheus configuration file
+COPY prometheus.yml /etc/prometheus/prometheus.yml
+
+# Command to run Prometheus
+CMD [ "--config.file=/etc/prometheus/prometheus.yml" ]

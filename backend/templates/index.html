@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .report-section {
+            margin-top: 20px;
+        }
+        .report-title {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        .report-table {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Stock Market Dashboard</h1>
+        
+        <!-- KPI Reports Section -->
+        <div class="report-section">
+            <h2 class="report-title">KPI Reports</h2>
+            <div class="row">
+                {% for ticker, report in reports.items() %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                {{ ticker }}
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Daily Closing Price:</strong> {{ report.daily_closing_price }}</p>
+                                <p><strong>24h Change:</strong> {{ report['24h_change'] }}%</p>
+                                <p><strong>30d Change:</strong> {{ report['30d_change'] }}%</p>
+                                <p><strong>1y Change:</strong> {{ report['1y_change'] }}%</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Top Gainers and Losers Section -->
+        <div class="report-section">
+            <h2 class="report-title">Top Gainers and Losers (Last 24h)</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Top Gainers</h3>
+                    <table class="table table-bordered report-table">
+                        <thead>
+                            <tr>
+                                <th>Ticker</th>
+                                <th>Open</th>
+                                <th>Close</th>
+                                <th>Change (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for gainer in top_gainers_losers_24h.top_gainers %}
+                                <tr>
+                                    <td>{{ gainer.ticker }}</td>
+                                    <td>{{ gainer.open }}</td>
+                                    <td>{{ gainer.close }}</td>
+                                    <td>{{ gainer.change_percentage }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h3>Top Losers</h3>
+                    <table class="table table-bordered report-table">
+                        <thead>
+                            <tr>
+                                <th>Ticker</th>
+                                <th>Open</th>
+                                <th>Close</th>
+                                <th>Change (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loser in top_gainers_losers_24h.top_losers %}
+                                <tr>
+                                    <td>{{ loser.ticker }}</td>
+                                    <td>{{ loser.open }}</td>
+                                    <td>{{ loser.close }}</td>
+                                    <td>{{ loser.change_percentage }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div class="report-section">
+            <h2 class="report-title">Generated Reports</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Daily Report</h3>
+                    <a href="/reports/daily_report_{{ now.strftime('%Y%m%d') }}.csv" class="btn btn-primary" download>Download Daily Report</a>
+                </div>
+                <div class="col-md-4">
+                    <h3>Weekly Report</h3>
+                    <a href="/reports/weekly_report_{{ now.strftime('%Y%W') }}.csv" class="btn btn-primary" download>Download Weekly Report</a>
+                </div>
+                <div class="col-md-4">
+                    <h3>Monthly Report</h3>
+                    <a href="/reports/monthly_report_{{ now.strftime('%Y%m') }}.csv" class="btn btn-primary" download>Download Monthly Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

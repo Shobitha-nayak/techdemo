@@ -1,0 +1,8 @@
+Flask
+prometheus_flask_exporter
+requests
+yfinance
+sqlalchemy
+pandas
+schedule
+flask-cors
