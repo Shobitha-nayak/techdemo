@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: shobithanayak24/stock-backend1:latest
+    container_name: stock-backend
+    ports:
+      - "5006:5006"
+    networks:
+      - stock-network
+
+  frontend:
+    image: shobithanayak24/stock-frontend:latest
+    container_name: stock-frontend
+    ports:
+      - "3004:3004"
+    environment:
+      BACKEND_URL: "http://stock-backend:5006"
+    networks:
+      - stock-network
+
+networks:
+  stock-network:
+    driver: bridge
