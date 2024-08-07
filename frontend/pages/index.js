@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { Box, Button, Container, Heading, Text, VStack, HStack, ChakraProvider } from '@chakra-ui/react';
-import { Bar, Line, Pie, PolarArea } from 'react-chartjs-2';
+import { Box, Button, Container, Heading, Text, VStack, HStack, ChakraProvider} from '@chakra-ui/react';
+import { Bar, Line, Pie, PolarArea ,Radar } from 'react-chartjs-2';
 import { useSpring, animated } from 'react-spring';
 import {
   Chart as ChartJS,
@@ -31,39 +31,28 @@ export const getServerSideProps = async () => {
   ];
 
   const reports = {};
-  const alerts = [];
-
+   
   for (const ticker of tickers) {
     try {
-      const response = await axios.get(`http://127.0.0.1:5004/api/kpi/${ticker}`);
+      const response = await axios.get(`http://127.0.0.1:5006/api/kpi/${ticker}`);
       reports[ticker] = response.data;
     } catch (error) {
       reports[ticker] = { error: 'Failed to fetch data' };
     }
   }
 
-  try {
-    const alertsResponse = await axios.get('http://127.0.0.1:5004/api/alerts');
-    alerts.push(...alertsResponse.data.alerts);
-  } catch (error) {
-    console.error('Failed to fetch alerts', error);
-  }
-
-  const topGainersLosersResponse = await axios.get('http://127.0.0.1:5004/api/top-gainers-losers');
+  const topGainersLosersResponse = await axios.get(`http://127.0.0.1:5006/api/top-gainers-losers`);
   const topGainersLosers = topGainersLosersResponse.data;
-
   return {
     props: {
       reports,
       topGainersLosers,
-      alerts,
     }
   };
 };
 
-const Home = ({ reports, topGainersLosers, alerts }) => {
+const Home = ({ reports, topGainersLosers  }) => {
   const [activeSection, setActiveSection] = useState('dailyClosingPrices');
-
   const topGainersData = {
     labels: topGainersLosers.top_gainers.map(gainer => gainer.ticker),
     datasets: [
@@ -193,7 +182,7 @@ const Home = ({ reports, topGainersLosers, alerts }) => {
     <ChakraProvider>
       <Container maxW="container.xl" p={4}>
         <animated.div style={fadeIn}>
-          <Heading as="h1" mb={6} textAlign="center">Stock Market KPI Dashboard</Heading>
+          <Heading as="h1" mb={6} textAlign="center">Stock Market Dashboard</Heading>
 
           <HStack spacing={4} mb={8} justify="center">
             <Button
@@ -276,6 +265,7 @@ const Home = ({ reports, topGainersLosers, alerts }) => {
               <Bar data={topLosersData} options={{ responsive: true }} />
             </Box>
           )}
+          
         </animated.div>
       </Container>
     </ChakraProvider>
