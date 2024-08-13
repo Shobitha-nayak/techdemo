@@ -55,18 +55,6 @@ jobs:
       - name: Push Backend Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1
 
-      # Set up Kubernetes and Helm
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          version: 'latest'
-
-      - name: Create kube directory
-        run: mkdir -p ~/.kube
-
-      - name: Configure Kubernetes
-        run: echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-
       - name: Install Helm
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
