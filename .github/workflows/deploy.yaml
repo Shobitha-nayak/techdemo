@@ -134,18 +134,17 @@ jobs:
       - name: Push Backend Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1
 
-      # Helm Deployment
-      - name: Install Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      # Set up Kubernetes
+      - name: Set up Kubeconfig
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
 
-      - name: Deploy Frontend and Backend with Helm
-        run: |
-          helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart \
-            --set frontend.image.repository=${{ secrets.DOCKER_USERNAME }}/stock-frontend \
-            --set frontend.image.tag=1.1 \
-            --set backend.image.repository=${{ secrets.DOCKER_USERNAME }}/stock-backend \
-            --set backend.image.tag=1.1
+      # Deploy using Helm
+      - name: Deploy with Helm
+        run: helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart --kube-context minikube --debug
+
 
 
       
