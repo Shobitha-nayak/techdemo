@@ -61,6 +61,9 @@ jobs:
         with:
           version: 'latest'
 
+      - name: Create kube directory
+        run: mkdir -p ~/.kube
+
       - name: Configure Kubernetes
         run: echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
