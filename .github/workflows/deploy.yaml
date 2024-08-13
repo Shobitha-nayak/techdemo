@@ -174,7 +174,7 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
 
       - name: Install Helm
-        uses: azure/setup-helm@v2
+        uses: helm/helm@v3
         with:
           version: v3.8.0
 
@@ -185,6 +185,7 @@ jobs:
             --set image.backend.tag=1.1 \
             --set image.frontend.repository=shobithanayak24/stock-frontend \
             --set image.frontend.tag=1.1
+
 
 
       
