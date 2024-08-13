@@ -70,11 +70,17 @@ jobs:
       # Configure Kubernetes
       - name: Configure Kubernetes
         run: |
+          # Decode and create temporary kubeconfig file
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
-          export KUBECONFIG=$(pwd)/kubeconfig
-          
-          kubectl config set-cluster minikube --certificate-authority <(echo "${{ secrets.CA_CERT }}" | base64 -d)
-          kubectl config set-credentials minikube --client-certificate <(echo "${{ secrets.CLIENT_CERT }}" | base64 -d) --client-key <(echo "${{ secrets.CLIENT_KEY }}" | base64 -d)
+
+          # Decode and set certificates
+          echo "${{ secrets.CA_CERT }}" | base64 -d > ca.crt
+          echo "${{ secrets.CLIENT_CERT }}" | base64 -d > client.crt
+          echo "${{ secrets.CLIENT_KEY }}" | base64 -d > client.key
+
+          # Configure kubectl with the decoded files
+          kubectl config set-cluster minikube --certificate-authority=ca.crt
+          kubectl config set-credentials minikube --client-certificate=client.crt --client-key=client.key
           kubectl config use-context minikube
           
           kubectl get nodes
