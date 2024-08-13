@@ -72,6 +72,9 @@ jobs:
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
           export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl config set clusters.minikube.certificate-authority-data $(echo "${{ secrets.CA_CERT }}" | base64 -d)
+          kubectl config set users.minikube.client-certificate-data $(echo "${{ secrets.CLIENT_CERT }}" | base64 -d)
+          kubectl config set users.minikube.client-key-data $(echo "${{ secrets.CLIENT_KEY }}" | base64 -d)
           kubectl config use-context minikube
           kubectl get nodes
 
