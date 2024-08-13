@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: stock-backend
+  template:
+    metadata:
+      labels:
+        app: stock-backend
+    spec:
+      containers:
+      - name: stock-backend
+        image: "{{ .Values.image.backend.repository }}:{{ .Values.image.backend.tag }}"
+        ports:
+        - containerPort: 5006
+      imagePullSecrets:
+      - name: regcred
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-frontend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: stock-frontend
+  template:
+    metadata:
+      labels:
+        app: stock-frontend
+    spec:
+      containers:
+      - name: stock-frontend
+        image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
+        ports:
+        - containerPort: 3001
+      imagePullSecrets:
+      - name: regcred
