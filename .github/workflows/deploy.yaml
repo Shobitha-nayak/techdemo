@@ -180,7 +180,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install tech-demo /path/to/helm-chart \
+          helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart \
             --set image.backend.repository=shobithanayak24/stock-backend \
             --set image.backend.tag=1.1 \
             --set image.frontend.repository=shobithanayak24/stock-frontend \
