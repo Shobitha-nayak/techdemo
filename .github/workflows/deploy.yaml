@@ -73,16 +73,21 @@ jobs:
           # Decode and create temporary kubeconfig file
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
 
-          # Decode and set certificates
-          echo "${{ secrets.CA_CERT }}" | base64 -d > ca.crt
-          echo "${{ secrets.CLIENT_CERT }}" | base64 -d > client.crt
-          echo "${{ secrets.CLIENT_KEY }}" | base64 -d > client.key
+          # Set KUBECONFIG environment variable
+          export KUBECONFIG=$(pwd)/kubeconfig
 
-          # Configure kubectl with the decoded files
-          kubectl config set-cluster minikube --certificate-authority=ca.crt
-          kubectl config set-credentials minikube --client-certificate=client.crt --client-key=client.key
+          # Verify the kubeconfig file
+          cat $KUBECONFIG
+
+          # Ensure all necessary directories and files exist
+          mkdir -p ~/.kube
+          cp kubeconfig ~/.kube/config
+
+          # Verify that the context exists and is set
+          kubectl config get-contexts
           kubectl config use-context minikube
-          
+
+          # Test Kubernetes connection
           kubectl get nodes
 
       # Deploy with Helm
