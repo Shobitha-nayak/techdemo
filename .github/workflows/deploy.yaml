@@ -55,9 +55,24 @@ jobs:
       - name: Push Backend Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1
 
+      # Install Helm
       - name: Install Helm
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
+      # Set up kubectl
+      - name: Set up kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+
+      # Authenticate with Kubernetes cluster
+      - name: Configure Kubernetes
+        run: |
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+
+      # Deploy with Helm
       - name: Deploy with Helm
         run: helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart --set image.backend.repository=${{ secrets.DOCKER_USERNAME }}/stock-backend --set image.backend.tag=1.1 --set image.frontend.repository=${{ secrets.DOCKER_USERNAME }}/stock-frontend --set image.frontend.tag=1.1
