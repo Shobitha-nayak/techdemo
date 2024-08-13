@@ -60,8 +60,8 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-      # Set up kubectl
-      - name: Set up kubectl
+      # Install kubectl
+      - name: Install kubectl
         run: |
           curl -LO "https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl"
           chmod +x ./kubectl
@@ -72,10 +72,11 @@ jobs:
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
           export KUBECONFIG=$(pwd)/kubeconfig
-          kubectl config set clusters.minikube.certificate-authority-data $(echo "${{ secrets.CA_CERT }}" | base64 -d)
-          kubectl config set users.minikube.client-certificate-data $(echo "${{ secrets.CLIENT_CERT }}" | base64 -d)
-          kubectl config set users.minikube.client-key-data $(echo "${{ secrets.CLIENT_KEY }}" | base64 -d)
+          
+          kubectl config set-cluster minikube --certificate-authority <(echo "${{ secrets.CA_CERT }}" | base64 -d)
+          kubectl config set-credentials minikube --client-certificate <(echo "${{ secrets.CLIENT_CERT }}" | base64 -d) --client-key <(echo "${{ secrets.CLIENT_KEY }}" | base64 -d)
           kubectl config use-context minikube
+          
           kubectl get nodes
 
       # Deploy with Helm
