@@ -1,0 +1,81 @@
+replicaCount: 1
+
+image:
+  backend:
+    repository: shobithanayak24/stock-backend
+    tag: "1.1"
+  frontend:
+    repository: shobithanayak24/stock-frontend
+    tag: "1.1"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: regcred
+
+service:
+  backend:
+    type: NodePort
+    port: 5006
+    nodePort: 30001
+  frontend:
+    type: NodePort
+    port: 3001
+    nodePort: 30000
+
+resources: {}
+
+
+# replicaCount: 1
+
+# images:
+#   backend:
+#     repository: shobithanayak24/stock-backend
+#     tag: "1.1"
+#   frontend:
+#     repository: shobithanayak24/stock-frontend
+#     tag: "1.1"
+#   prometheus: prom/prometheus:latest
+#   alertmanager: prom/alertmanager:latest
+#   grafana: grafana/grafana:latest
+#   pullPolicy: IfNotPresent
+
+# imagePullSecrets:
+#   - name: regcred
+
+# service:
+#   backend:
+#     type: NodePort
+#     port: 5006
+#     nodePort: 30001
+#   frontend:
+#     type: NodePort
+#     port: 3001
+#     nodePort: 30000
+#   prometheus:
+#     type: NodePort
+#     port: 9090
+#     nodePort: 31000
+#   alertmanager:
+#     type: NodePort
+#     port: 9093
+#     nodePort: 31001
+#   grafana:
+#     type: NodePort
+#     port: 3000
+#     nodePort: 31002
+
+# smtp:
+#   host: 'smtp.gmail.com:587'
+#   from: 'shobithanayak2405@gmail.com'
+#   username: 'shobithanayak2405@gmail.com'
+#   password: 'umspleobuecssthi'
+
+# receiverEmail: 'sayalis0910@gmail.com'
+
+# grafana:
+#   pvcSize: 10Gi
+#   adminUser: admin
+#   adminPassword: admin
+
+
+# resources: {}
