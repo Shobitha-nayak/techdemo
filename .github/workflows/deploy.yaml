@@ -295,9 +295,6 @@
 
 
 
-
-
-
 name: Build, Push, and Deploy
 
 on:
@@ -312,9 +309,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: List repository contents
-        run: ls -R
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -357,16 +351,18 @@ jobs:
         with:
           helm-version: v3.9.0
 
-      - name: Deploy Helm Chart
+      - name: Deploy Helm Chart with Optimizations
         run: |
-          helm version
-          kubectl config use-context minikube
           helm upgrade --install tech-demo /home/runner/work/techdemo/techdemo \
+            --atomic --wait \
             --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 \
             --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 \
+            --disable-openapi-validation \
             --kube-context minikube \
             --debug
 
+        
+        
         
         
   
