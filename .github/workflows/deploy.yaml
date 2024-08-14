@@ -190,7 +190,7 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube start --driver=none
+          minikube start
           minikube status
 
       - name: Set up kubeconfig
