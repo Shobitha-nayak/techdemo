@@ -275,10 +275,7 @@ jobs:
         with:
           helm-version: v3.9.0
 
-      - name: List files after checkout
-        run: ls -R ./TECH-DEMO
-
-      - name: Install Helm Chart
+      - name: Deploy Helm Chart
         run: |
           helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart --set backend.image=shobithanayak24/stock-backend:1.1 --set frontend.image=shobithanayak24/stock-frontend:1.1 --kube-context minikube --debug
 
