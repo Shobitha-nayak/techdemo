@@ -316,12 +316,6 @@ jobs:
       - name: List repository contents
         run: ls -R
 
-      - name: Set Environment Variable for Helm Chart Path
-        run: echo "HELM_CHART_PATH=./TECH-DEMO/helm-chart" >> $GITHUB_ENV
-
-      - name: List Helm Chart Path Contents
-        run: ls -R $HELM_CHART_PATH
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
