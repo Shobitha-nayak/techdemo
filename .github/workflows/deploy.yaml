@@ -297,6 +297,7 @@
 
 
 
+
 name: Build, Push, and Deploy
 
 on:
@@ -312,8 +313,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: List repository contents
-        run: ls -R
+      - name: Set Environment Variable for Helm Chart Path
+        run: echo "HELM_CHART_PATH=/home/sigmoid/TECH-DEMO/helm-chart" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -358,8 +359,7 @@ jobs:
 
       - name: Deploy Helm Chart
         run: |
-          helm upgrade --install tech-demo ${{ secrets.HELM_CHART_PATH }} --set backend.image=shobithanayak24/stock-backend:1.1 --set frontend.image=shobithanayak24/stock-frontend:1.1 --kube-context minikube --debug
-
+          helm upgrade --install tech-demo $HELM_CHART_PATH --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 --kube-context minikube --debug
 
       
   
