@@ -153,8 +153,7 @@
 
 
 
-
-name: Deploy to Kubernetes
+name: CIC/CD
 
 on:
   push:
@@ -162,32 +161,47 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Create .kube directory
-        run: mkdir -p $HOME/.kube
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Set up Kubernetes
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Backend Docker Image
         run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 -f ./backend/Dockerfile ./backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1
+
+      - name: Build and Push Frontend Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 -f ./frontend/Dockerfile ./frontend
+          docker push ${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1
+
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
+          chmod 600 ~/.kube/config
 
       - name: Install Helm
-        uses: azure/setup-helm@v1
-        with:
-          version: 'v3.8.0'
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart \
-            --set image.backend.repository=shobithanayak24/stock-backend \
-            --set image.backend.tag=1.1 \
-            --set image.frontend.repository=shobithanayak24/stock-frontend \
-            --set image.frontend.tag=1.1
+          helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 --kube-context minikube --debug
+
+
 
 
 
