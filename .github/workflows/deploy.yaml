@@ -149,11 +149,7 @@
 
 
 
-
-
-
-
-name: CIC/CD
+name: Build, Push, and Deploy
 
 on:
   push:
@@ -187,11 +183,22 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 -f ./frontend/Dockerfile ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1
 
+      - name: Install Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=none
+          minikube status
+
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
+          minikube update-context
           chmod 600 ~/.kube/config
+          kubectl config view
 
       - name: Install Helm
         run: |
@@ -200,8 +207,6 @@ jobs:
       - name: Deploy with Helm
         run: |
           helm upgrade --install tech-demo /home/sigmoid/TECH-DEMO/helm-chart --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 --kube-context minikube --debug
-
-
 
 
 
