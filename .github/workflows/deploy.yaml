@@ -200,13 +200,20 @@ jobs:
           chmod 600 ~/.kube/config
           kubectl config view
 
-      - name: Install Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      # - name: Install Helm
+      #   run: |
+      #     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-      - name: Deploy with Helm
+      - name: Change directory to helm-chart
+        run: cd TECH-DEMO/helm-chart
+
+      - name: Install Helm Chart
         run: |
-          helm upgrade --install tech-demo ./TECH-DEMO/helm-chart --set backend.image=shobithanayak24/stock-backend:1.1 --set frontend.image=shobithanayak24/stock-frontend:1.1 --kube-context minikube --debug
+          helm upgrade --install tech-demo . --set backend.image=shobithanayak24/stock-backend:1.1 --set frontend.image=shobithanayak24/stock-frontend:1.1 --kube-context minikube --debug
+
+      # - name: Deploy with Helm
+      #   run: |
+      #     helm upgrade --install tech-demo ./TECH-DEMO/helm-chart --set backend.image=shobithanayak24/stock-backend:1.1 --set frontend.image=shobithanayak24/stock-frontend:1.1 --kube-context minikube --debug
 
 
 
