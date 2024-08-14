@@ -359,7 +359,13 @@ jobs:
 
       - name: Deploy Helm Chart
         run: |
-         helm upgrade --install tech-demo /home/runner/work/techdemo/techdemo --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 --kube-context minikube --debug
+          helm version
+          kubectl config use-context minikube
+          helm upgrade --install tech-demo /home/runner/work/techdemo/techdemo \
+            --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 \
+            --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 \
+            --kube-context minikube \
+            --debug
 
         
         
