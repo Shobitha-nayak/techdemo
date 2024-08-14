@@ -347,14 +347,19 @@ jobs:
           kubectl config view
 
       - name: Install Helm
-        uses: azure/setup-helm@v1
-        with:
-          helm-version: v3.9.0
+        run: |
+         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+
+      # - name: Install Helm
+        # uses: azure/setup-helm@v1
+        # with:
+          # helm-version: v3.9.0
 
       - name: Deploy Helm Chart with Optimizations
         run: |
           helm upgrade --install tech-demo /home/runner/work/techdemo/techdemo \
-            --atomic --wait \
+          
             --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 \
             --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 \
             --disable-openapi-validation \
