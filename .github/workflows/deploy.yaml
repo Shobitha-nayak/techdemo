@@ -356,7 +356,7 @@ jobs:
 
       - name: Apply Kubernetes Manifests
         run: |
-          kubectl apply -f rendered.yaml --context=minikube
+          kubectl apply -f /home/sigmoid/TECH-DEMO/rendered.yaml --context=minikube
 
         
         
