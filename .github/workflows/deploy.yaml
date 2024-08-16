@@ -323,6 +323,7 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 -f ./backend/Dockerfile ./backend
           docker push ${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1
+
       - name: Build and Push Frontend Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 -f ./frontend/Dockerfile ./frontend
@@ -349,10 +350,11 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           helm-version: v3.9.0
-      
-     - name: Deploy Helm Chart 
-     run: |
-      helm upgrade --install tech-demo ./helm-chart --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 --kube-context minikube --debug    
-        
-        
-  
+
+      - name: Deploy Helm Chart
+        run: |
+          helm upgrade --install tech-demo ./helm-chart \
+            --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 \
+            --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 \
+            --kube-context minikube \
+            --debug
