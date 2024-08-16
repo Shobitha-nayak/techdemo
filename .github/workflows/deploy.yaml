@@ -356,10 +356,13 @@ jobs:
 
       - name: Apply Kubernetes Manifests
         run: |
-          kubectl apply -f tech-demo.yaml --context=minikube
+          kubectl apply -f deployment.yaml --context=minikube
 
         
         
+     # - name: Deploy Helm Chart
+     #    run: |
+     #      helm upgrade --install tech-demo ./helm-chart --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 --kube-context minikube --debug    
         
         
   
