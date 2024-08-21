@@ -354,7 +354,7 @@ jobs:
       - name: Deploy Helm Chart
         run: |
           cd /home/sigmoid/TECH-DEMO/
-          helm upgrade --install tech-demo ./helm-chart \
+          helm upgrade --install tech-demo ./deploy.yaml \
           --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 \
           --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 \
           --kube-context minikube \
