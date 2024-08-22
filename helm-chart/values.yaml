@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  backend:
+    repository: shobithanayak24/stock-backend
+    tag: "1.1"
+  frontend:
+    repository: shobithanayak24/stock-frontend
+    tag: "1.1"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: regcred
+
+service:
+  backend:
+    type: NodePort
+    port: 5006
+    nodePort: 30001
+  frontend:
+    type: NodePort
+    port: 3001
+    nodePort: 30000
+
+resources: {}
