@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy Helm Chart
         run: |
-          helm upgrade --install tech-demo ./deploy.yaml \
+          helm upgrade --install tech-demo ./helm-chart \
           --set backend.image=${{ secrets.DOCKER_USERNAME }}/stock-backend:1.1 \
           --set frontend.image=${{ secrets.DOCKER_USERNAME }}/stock-frontend:1.1 \
           --kube-context minikube \
