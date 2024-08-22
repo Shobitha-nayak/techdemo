@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-backend
+spec:
+  selector:
+    app: stock-backend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.backend.port }}
+      targetPort: 5006
+      nodePort: {{ .Values.service.backend.nodePort }}
+  type: {{ .Values.service.backend.type }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-frontend
+spec:
+  selector:
+    app: stock-frontend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.frontend.port }}
+      targetPort: 3001
+      nodePort: {{ .Values.service.frontend.nodePort }}
+  type: {{ .Values.service.frontend.type }}
