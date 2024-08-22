@@ -1,0 +1,4 @@
+apiVersion: v2
+name: tech-demo
+description: A Helm chart for deploying the TECH DEMO application
+version: 0.1.0
